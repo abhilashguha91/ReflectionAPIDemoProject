@@ -1,12 +1,13 @@
 package javaprep.reflection.demo;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public class ReflectionDemoExecutor extends EnemyShip {
 
 	public static void main(String[] args){
-		// TODO Auto-generated method stub
 		
 		Class reflectUFOEnemyShip = UFOEnemyShip.class;
 		
@@ -44,6 +45,63 @@ public class ReflectionDemoExecutor extends EnemyShip {
 			System.out.print(parameter.getName());
 			System.out.println();
 		}
+		
+		// Retrieve the constructors of the Class
+		Constructor[] constructors = reflectUFOEnemyShip.getConstructors();
+		for(Constructor eachConstructor : constructors) {
+			System.out.print("Constructor Parameters: ");
+			for(Class eachParameter : eachConstructor.getParameterTypes()) {
+				System.out.print(eachParameter.getName()+" ");
+			}
+			System.out.println();
+		}
+		
+		// Retrieving their parameters
+		for(Constructor eachConstructor : constructors) {
+			System.out.print("Constructor Parameters: ");
+			for(Class eachParameter : eachConstructor.getParameterTypes()) {
+				System.out.print(eachParameter.getName()+" ");
+			}
+			System.out.println();
+		}
+		
+		// Retrieve the constructors of the Class one by one, by sending different parameters
+		Constructor constructor1 = null;
+		Constructor constructor2 = null;
+		
+		try {
+			constructor1 = reflectUFOEnemyShip.getConstructor(int.class, String.class);
+			constructor2 = reflectUFOEnemyShip.getConstructor(new Class[] {EnemyShip.class});
+			//or,
+			constructor2 = reflectUFOEnemyShip.getConstructor(EnemyShip.class);
+			//or,
+			EnemyShip enemyShip = new EnemyShip();
+			constructor2 = reflectUFOEnemyShip.getConstructor(enemyShip.getClass());
+			// Mind you this int.class, String.class or EnemyShip.class the basic idea is to 
+			// tell the type of arguments (not reference or values) to just identify the constructor and 
+			// return it.
+			
+			// These give no such method exception, as the validity of the call is handled in the runtime.
+			
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+		
+		
+		// Instantiate objects with the help of these constructors
+		try {
+			UFOEnemyShip obj1 = (UFOEnemyShip)constructor1.newInstance(3,"Some random String");
+			EnemyShip enemyShip = new EnemyShip("TX-1000","AIRCRAFT_CARRIER");
+			UFOEnemyShip obj2 = (UFOEnemyShip)constructor2.newInstance(enemyShip);
+			
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

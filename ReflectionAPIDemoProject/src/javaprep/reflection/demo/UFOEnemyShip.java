@@ -4,6 +4,7 @@ public class UFOEnemyShip extends EnemyShip implements IAttackShip {
 	
 	// Private Variable
 	private String idCode = "1001";
+	private EnemyShip enemyShip;
 	// public method
 	public String getPublicMethod(String s) {return "How did u get this?";}
 	// protected method
@@ -17,10 +18,14 @@ public class UFOEnemyShip extends EnemyShip implements IAttackShip {
 		return "Inside getParameterizedPrivateMethod() with thisNumber: "+ thisNumber + " " + thatString;
 	}
 	// Parameterized Constructor
-	UFOEnemyShip(int thisNumber, String thatString) {
+	public UFOEnemyShip(int thisNumber, String thatString) {
 		System.out.println("Inside Constructor with thisNumber: "+ thisNumber + " " + thatString); 
 	}
-	
+	// Parameterized Constructor
+	public UFOEnemyShip(EnemyShip enemyShip) {
+		System.out.println("Inside Constructor with EnemyShip: With Name:"+ enemyShip.getShipName() + " & With Type: " + enemyShip.getShipType()); 
+		this.enemyShip = enemyShip; 
+	}
 	
 	
 }
