@@ -1,6 +1,7 @@
 package javaprep.reflection.demo;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -89,18 +90,66 @@ public class ReflectionDemoExecutor extends EnemyShip {
 			e.printStackTrace();
 		}
 		
-		
 		// Instantiate objects with the help of these constructors
+		UFOEnemyShip obj1 = null;
+		UFOEnemyShip obj2 = null;
 		try {
-			UFOEnemyShip obj1 = (UFOEnemyShip)constructor1.newInstance(3,"Some random String");
+			obj1 = (UFOEnemyShip)constructor1.newInstance(3,"Some random String");
 			EnemyShip enemyShip = new EnemyShip("TX-1000","AIRCRAFT_CARRIER");
-			UFOEnemyShip obj2 = (UFOEnemyShip)constructor2.newInstance(enemyShip);
+			obj2 = (UFOEnemyShip)constructor2.newInstance(enemyShip);
 			
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		// Retrieving fields(with any accessor) from a class by name
+		Field privateFieldIdCode = null;
+		try {
+			privateFieldIdCode = UFOEnemyShip.class.getDeclaredField("idCode");
+		} catch (NoSuchFieldException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Retrieving the Value of this private field
+		String privateFieldIdCodeValue = null;
+		
+		try {
+			// Change accessibility, as private field will be inaccessible
+			privateFieldIdCode.setAccessible(true);
+			// Get the value by Field.get(obj) quite opposite of how we normally get value of a field from
+			// an object
+			privateFieldIdCodeValue = (String)privateFieldIdCode.get(obj1);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Private Field ID Code for Object:"+obj1+" :: is : "+privateFieldIdCodeValue);
+		
+		// Retrieving a method(with any accesor) from a class by name
+		Method privateMethodFetPrivateMethod = null;
+		try {
+			privateMethodFetPrivateMethod = UFOEnemyShip.class.getDeclaredMethod("getPrivateMethod", null);
+		} catch (NoSuchMethodException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Invoking the private method
+		// Change accessibility, as private method will be inaccessible
+		privateMethodFetPrivateMethod.setAccessible(true);
+		String methodReturnString = null;
+		try {
+			// we invoke the method with object and arguments, however here it is null
+			methodReturnString = (String) privateMethodFetPrivateMethod.invoke(obj1, null);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Private Method for Object:"+obj1+" :: returned : "+methodReturnString);
+		
 		
 	}
 
