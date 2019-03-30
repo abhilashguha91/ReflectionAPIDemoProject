@@ -150,6 +150,25 @@ public class ReflectionDemoExecutor extends EnemyShip {
 		}
 		System.out.println("Private Method for Object:"+obj1+" :: returned : "+methodReturnString);
 		
+		// Same thing now with parameters
+		// This class array tells what kind of params the method accepts
+		Class[] params = new Class[] {int.class, String.class};
+		// This object array tells you the objects we are going to pass as parameters when we invoke the method
+		Object[] paramObjs = new Object[] {1,new String("I'm tired of random strings")};
+		Method privateMethodParameterizedPrivateMethod = null;
+		
+		try {
+			privateMethodParameterizedPrivateMethod = UFOEnemyShip.class.getDeclaredMethod("getParameterizedPrivateMethod", params);
+			
+			// break accessibility
+			privateMethodParameterizedPrivateMethod.setAccessible(true);
+			//invoke with parameters
+			System.out.println(privateMethodParameterizedPrivateMethod.invoke(obj1, paramObjs));
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 	}
 
